@@ -1,0 +1,36 @@
+# Python 虚拟环境
+.venv/
+venv/
+env/
+
+# Python 缓存文件
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# 运行时数据库
+data.db
+
+# 敏感配置文件（包含 cookies 等凭证）
+config.yaml
+
+# IDE 配置
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 测试与覆盖率
+.coverage
+htmlcov/
+.pytest_cache/
+
+# 分发与构建
+dist/
+build/
+*.egg-info/
