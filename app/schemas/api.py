@@ -129,3 +129,26 @@ class StatusResponse(BaseModel):
 
 class ErrorResponse(BaseModel):
     detail: str = Field(..., description="错误详情")
+
+
+from typing import TypeVar, Generic
+
+T = TypeVar("T")
+
+
+class ApiResponse(BaseModel, Generic[T]):
+    """统一 API 响应格式"""
+
+    code: int = Field(..., description="响应码（0=成功，非0=错误）")
+    message: str = Field(..., description="响应消息")
+    data: Optional[T] = Field(None, description="响应数据")
+
+
+def success_response(data: T, message: str = "操作成功") -> ApiResponse[T]:
+    """创建成功响应"""
+    return ApiResponse(code=0, message=message, data=data)
+
+
+def error_response(code: int, message: str, data: Optional[T] = None) -> ApiResponse[T]:
+    """创建错误响应"""
+    return ApiResponse(code=code, message=message, data=data)
