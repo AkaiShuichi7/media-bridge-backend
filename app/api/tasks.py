@@ -133,7 +133,7 @@ async def get_tasks():
     if not result.get("state"):
         raise HTTPException(status_code=500, detail="获取任务列表失败")
 
-    tasks = result.get("tasks", [])
+    tasks = result.get("tasks") or []
     task_items = [
         TaskItem(
             task_id=task.get("info_hash", ""),

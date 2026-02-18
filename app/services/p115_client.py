@@ -63,8 +63,7 @@ class P115Client:
     async def add_offline_task(self, magnet: str, path_id: str) -> dict:
         """添加离线下载任务"""
         return await self._retry_with_backoff(
-            self._client.offline_add_url, {
-                "url": magnet, "wp_path_id": path_id}
+            self._client.offline_add_url, {"url": magnet, "wp_path_id": path_id}
         )
 
     async def get_offline_tasks(self) -> dict:
@@ -78,7 +77,7 @@ class P115Client:
         if not tasks_response.get("state"):
             return None
 
-        tasks = tasks_response.get("tasks", [])
+        tasks = tasks_response.get("tasks") or []
         for task in tasks:
             if task.get("info_hash") == info_hash:
                 return task

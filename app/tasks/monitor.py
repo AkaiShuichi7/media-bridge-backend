@@ -79,7 +79,7 @@ class TaskMonitor:
                 return
 
             # 3. 只处理系统添加的任务
-            tasks = response.get("tasks", [])
+            tasks = response.get("tasks") or []
             for task in tasks:
                 info_hash = task.get("info_hash")
                 if info_hash and info_hash in system_hashes:
