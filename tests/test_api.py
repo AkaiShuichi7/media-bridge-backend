@@ -130,7 +130,8 @@ class TestAddTask:
 
         assert response.status_code == 200
         data = response.json()
-        assert "task_id" in data
+        assert data["code"] == 0
+        assert "task_id" in data["data"]
         assert "message" in data
 
     @pytest.mark.asyncio
@@ -150,9 +151,10 @@ class TestGetTasks:
 
         assert response.status_code == 200
         data = response.json()
-        assert "total" in data
-        assert "tasks" in data
-        assert isinstance(data["tasks"], list)
+        assert data["code"] == 0
+        assert "total" in data["data"]
+        assert "tasks" in data["data"]
+        assert isinstance(data["data"]["tasks"], list)
 
 
 class TestGetTaskDetail:
@@ -162,8 +164,9 @@ class TestGetTaskDetail:
 
         assert response.status_code == 200
         data = response.json()
-        assert "task_id" in data or "info_hash" in data
-        assert "name" in data
+        assert data["code"] == 0
+        assert "task_id" in data["data"] or "info_hash" in data["data"]
+        assert "name" in data["data"]
 
     @pytest.mark.asyncio
     async def test_get_task_detail_not_found(self, client, mock_p115_client):
@@ -208,8 +211,9 @@ class TestGetOrganizeRecords:
 
             assert response.status_code == 200
             data = response.json()
-            assert "total" in data
-            assert "records" in data
+            assert data["code"] == 0
+            assert "total" in data["data"]
+            assert "records" in data["data"]
 
 
 class TestGetConfig:
@@ -219,8 +223,11 @@ class TestGetConfig:
 
         assert response.status_code == 200
         data = response.json()
-        assert "p115" in data
-        assert "media" in data
+        assert data["code"] == 0
+        assert data["message"] == "获取配置成功"
+        assert "data" in data
+        assert "p115" in data["data"]
+        assert "media" in data["data"]
 
 
 class TestUpdateConfig:
@@ -238,7 +245,9 @@ class TestUpdateConfig:
 
         assert response.status_code == 200
         data = response.json()
-        assert "message" in data
+        assert data["code"] == 0
+        assert data["message"] == "配置更新成功"
+        assert "data" in data
 
 
 class TestGetLibraries:
@@ -248,9 +257,12 @@ class TestGetLibraries:
 
         assert response.status_code == 200
         data = response.json()
-        assert "libraries" in data
-        assert isinstance(data["libraries"], list)
-        assert len(data["libraries"]) == 2
+        assert data["code"] == 0
+        assert data["message"] == "获取媒体库列表成功"
+        assert "data" in data
+        assert "libraries" in data["data"]
+        assert isinstance(data["data"]["libraries"], list)
+        assert len(data["data"]["libraries"]) == 2
 
 
 class TestGetStatus:
@@ -260,5 +272,8 @@ class TestGetStatus:
 
         assert response.status_code == 200
         data = response.json()
-        assert "monitor_running" in data
-        assert "active_tasks" in data
+        assert data["code"] == 0
+        assert data["message"] == "获取系统状态成功"
+        assert "data" in data
+        assert "monitor_running" in data["data"]
+        assert "active_tasks" in data["data"]

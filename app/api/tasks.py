@@ -17,6 +17,7 @@ from app.schemas.api import (
     TaskListResponse,
     TaskDetailResponse,
     DeleteTaskResponse,
+    success_response,
 )
 from app.models.offline_task import OfflineTask
 from app.core.database import get_session
@@ -45,7 +46,7 @@ def _find_library_by_name(name: str):
     return None
 
 
-@router.post("/tasks", response_model=AddTaskResponse)
+@router.post("/tasks")
 async def add_task(request: AddTaskRequest):
     library = _find_library_by_name(request.library_name)
     if library is None:
@@ -120,10 +121,13 @@ async def add_task(request: AddTaskRequest):
         logger.error(f"保存离线任务失败: {e}")
 
     # 返回最终的 info_hash（None 时返回空字符串避免 API 响应为 null）
-    return AddTaskResponse(task_id=final_info_hash or "", message="离线任务添加成功")
+    return success_response(
+        data=AddTaskResponse(task_id=final_info_hash or "", message="离线任务添加成功"),
+        message="离线任务添加成功",
+    )
 
 
-@router.get("/tasks", response_model=TaskListResponse)
+@router.get("/tasks")
 async def get_tasks():
     result = await _p115_client.get_offline_tasks()
     if not result.get("state"):
@@ -141,30 +145,38 @@ async def get_tasks():
         for task in tasks
     ]
 
-    return TaskListResponse(total=len(task_items), tasks=task_items)
+    return success_response(
+        data=TaskListResponse(total=len(task_items), tasks=task_items),
+        message="获取任务列表成功",
+    )
 
 
-@router.get("/tasks/{task_id}", response_model=TaskDetailResponse)
+@router.get("/tasks/{task_id}")
 async def get_task_detail(task_id: str):
     task = await _p115_client.get_task_status(task_id)
     if task is None:
         raise HTTPException(status_code=404, detail=f"任务 '{task_id}' 不存在")
 
-    return TaskDetailResponse(
-        task_id=task.get("info_hash", ""),
-        name=task.get("name", ""),
-        status=task.get("status", 0),
-        progress=task.get("percent_done", 0),
-        add_time=datetime.fromtimestamp(task.get("add_time", 0)),
-        file_id=str(task.get("file_id")) if task.get("file_id") else None,
-        path=task.get("path"),
+    return success_response(
+        data=TaskDetailResponse(
+            task_id=task.get("info_hash", ""),
+            name=task.get("name", ""),
+            status=task.get("status", 0),
+            progress=task.get("percent_done", 0),
+            add_time=datetime.fromtimestamp(task.get("add_time", 0)),
+            file_id=str(task.get("file_id")) if task.get("file_id") else None,
+            path=task.get("path"),
+        ),
+        message="获取任务详情成功",
     )
 
 
-@router.delete("/tasks/{task_id}", response_model=DeleteTaskResponse)
+@router.delete("/tasks/{task_id}")
 async def delete_task(task_id: str):
     result = await _p115_client.delete_offline_task(task_id)
     if not result.get("state"):
         raise HTTPException(status_code=500, detail="删除任务失败")
 
-    return DeleteTaskResponse(message="任务删除成功")
+    return success_response(
+        data=DeleteTaskResponse(message="任务删除成功"), message="任务删除成功"
+    )

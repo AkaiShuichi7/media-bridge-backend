@@ -10,12 +10,17 @@ from sqlalchemy import select, func
 
 from app.core.database import get_session
 from app.models.organize_record import OrganizeRecord
-from app.schemas.api import OrganizeRecordItem, OrganizeRecordsResponse
+from app.schemas.api import (
+    ApiResponse,
+    OrganizeRecordItem,
+    OrganizeRecordsResponse,
+    success_response,
+)
 
 router = APIRouter()
 
 
-@router.get("/organize/records", response_model=OrganizeRecordsResponse)
+@router.get("/organize/records", response_model=ApiResponse[OrganizeRecordsResponse])
 async def get_organize_records(
     page: int = Query(1, ge=1, description="页码"),
     page_size: int = Query(20, ge=1, le=100, description="每页数量"),
@@ -48,4 +53,7 @@ async def get_organize_records(
             for record in records
         ]
 
-        return OrganizeRecordsResponse(total=total, records=record_items)
+        return success_response(
+            data=OrganizeRecordsResponse(total=total, records=record_items),
+            message="获取整理记录成功",
+        )
