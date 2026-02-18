@@ -16,6 +16,7 @@ from app.schemas.api import (
     UpdateConfigRequest,
     UpdateConfigResponse,
     LibrariesResponse,
+    success_response,
 )
 
 if TYPE_CHECKING:
@@ -31,7 +32,7 @@ def init_config_router(config: "Config"):
     _config = config
 
 
-@router.get("/config", response_model=ConfigResponse)
+@router.get("/config")
 async def get_config():
     libraries = [
         LibraryItem(
@@ -48,21 +49,24 @@ async def get_config():
         remove_keywords=_config.media.xx.remove_keywords if _config.media.xx else []
     )
 
-    return ConfigResponse(
-        p115=P115ConfigResponse(
-            rotation_training_interval_min=_config.p115.rotation_training_interval_min,
-            rotation_training_interval_max=_config.p115.rotation_training_interval_max,
+    return success_response(
+        data=ConfigResponse(
+            p115=P115ConfigResponse(
+                rotation_training_interval_min=_config.p115.rotation_training_interval_min,
+                rotation_training_interval_max=_config.p115.rotation_training_interval_max,
+            ),
+            media=MediaConfigResponse(
+                min_transfer_size=_config.media.min_transfer_size,
+                video_formats=_config.media.video_formats,
+                libraries=libraries,
+                xx=xx_config,
+            ),
         ),
-        media=MediaConfigResponse(
-            min_transfer_size=_config.media.min_transfer_size,
-            video_formats=_config.media.video_formats,
-            libraries=libraries,
-            xx=xx_config,
-        ),
+        message="获取配置成功",
     )
 
 
-@router.put("/config", response_model=UpdateConfigResponse)
+@router.put("/config")
 async def update_config(request: UpdateConfigRequest):
     if request.p115:
         if request.p115.rotation_training_interval_min is not None:
@@ -78,10 +82,13 @@ async def update_config(request: UpdateConfigRequest):
         if request.media.min_transfer_size is not None:
             _config.media.min_transfer_size = request.media.min_transfer_size
 
-    return UpdateConfigResponse(message="配置更新成功")
+    return success_response(
+        data=UpdateConfigResponse(message="配置更新成功"),
+        message="配置更新成功",
+    )
 
 
-@router.get("/libraries", response_model=LibrariesResponse)
+@router.get("/libraries")
 async def get_libraries():
     libraries = [
         LibraryItem(
@@ -94,4 +101,7 @@ async def get_libraries():
         for lib in _config.media.libraries
     ]
 
-    return LibrariesResponse(libraries=libraries)
+    return success_response(
+        data=LibrariesResponse(libraries=libraries),
+        message="获取媒体库列表成功",
+    )

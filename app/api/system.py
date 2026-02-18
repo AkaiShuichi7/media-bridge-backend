@@ -8,7 +8,7 @@ from datetime import datetime
 
 from fastapi import APIRouter
 
-from app.schemas.api import StatusResponse
+from app.schemas.api import StatusResponse, success_response, ApiResponse
 
 if TYPE_CHECKING:
     from app.tasks.monitor import TaskMonitor
@@ -32,7 +32,7 @@ def update_last_check_time():
     _last_check_time = datetime.now()
 
 
-@router.get("/status", response_model=StatusResponse)
+@router.get("/status", response_model=ApiResponse[StatusResponse])
 async def get_status():
     monitor_running = False
     if _task_monitor is not None:
@@ -51,8 +51,11 @@ async def get_status():
         except Exception:
             pass
 
-    return StatusResponse(
-        monitor_running=monitor_running,
-        active_tasks=active_tasks,
-        last_check_time=_last_check_time.isoformat() if _last_check_time else None,
+    return success_response(
+        data=StatusResponse(
+            monitor_running=monitor_running,
+            active_tasks=active_tasks,
+            last_check_time=_last_check_time.isoformat() if _last_check_time else None,
+        ),
+        message="获取系统状态成功",
     )
