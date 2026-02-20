@@ -1,6 +1,6 @@
 # 115网盘相关配置
 p115:
-  # 账号信息（Cookies）
+  # 账号信息
   cookies: "UID=your_uid; CID=your_cid; SEID=your_seid; KID=your_kid"
   # 115任务监控的轮训间隔最小值（秒）
   rotation_training_interval_min: 60
@@ -15,17 +15,92 @@ media:
   libraries:
     # 下载地址和下载完成后移动文件的目标目录映射
     - name: "测试"
-      download_path: "/云下载/测试/下载" # 离线下载文件的存放目录
-      target_path: "/云下载/测试/目标" # 下载完成后移动文件的目标目录
+      download_path: "/云下载/zzz-测试/下载" # 离线下载文件的存放目录
+      target_path: "/云下载/zzz-测试/目标" # 下载完成后移动文件的目标目录
       min_transfer_size: 100 # 覆盖默认的最小传输大小（MB），小于等于0表示使用默认值
       # 媒体库类型，决定了如何处理下载完成的视频文件，目前支持以下类型：
       # system：表示媒体服务器创建的可搜刮媒体库，不需要对其进行特殊处理，直接将视频文件移动到目标目录即可
       # xx-片商：标识成人片库，xx表示为成人片库，我们要对其进行特殊处理（重命名等操作），片商表示成人片库的片商名称，我们需要根据片商名称来确定视频文件的目标目录结构，例如对于片商为"SSNI"的成人片库，我们可以将下载完成的视频文件移动到目标目录下的"SSNI"子目录中
+      # type: "system"
       type: "system"
+    - name: "电影"
+      download_path: "/云下载/media/movies" # 离线下载文件的存放目录
+      target_path: "/media/转存/movies" # 下载完成后移动文件的目标目录
+      min_transfer_size: 200 # 覆盖默认的最小传输大小（MB），小于等于0表示使用默认值
+      type: system
+    - name: "剧集"
+      download_path: "/云下载/media/tv" # 离线下载文件的存放目录
+      target_path: "/media/转存/tv" # 下载完成后移动文件的目标目录
+      min_transfer_size: 200 # 覆盖默认的最小传输大小（MB），小于等于0表示使用默认值
+      type: system
+    - name: "国漫"
+      download_path: "/云下载/media/anime/国漫" # 离线下载文件的存放目录
+      target_path: "/media/转存/anime/国漫" # 下载完成后移动文件的目标目录
+      min_transfer_size: 200 # 覆盖默认的最小传输大小（MB），小于等于0表示使用默认值
+      type: system
+    - name: "日番"
+      download_path: "/云下载/media/anime/日番" # 离线下载文件的存放目录
+      target_path: "/media/转存/anime/日番" # 下载完成后移动文件的目标目录
+      min_transfer_size: 200 # 覆盖默认的最小传输大小（MB），小于等于0表示使用默认值
+      type: system
+    - name: "xx-其他"
+      download_path: "/云下载/media/xx" # 离线下载文件的存放目录
+      target_path: "/media/xx/日韩" # 下载完成后移动文件的目标目录
+      min_transfer_size: 200 # 覆盖默认的最小传输大小（MB），小于等于0表示使用默认值
+      type: xx-其他
+    - name: "xx-溜池五郎"
+      download_path: "/云下载/media/xx" # 离线下载文件的存放目录
+      target_path: "/media/xx/日韩" # 下载完成后移动文件的目标目录
+      min_transfer_size: 200 # 覆盖默认的最小传输大小（MB），小于等于0表示使用默认值
+      type: xx-溜池五郎
+    - name: "xx-BBAN"
+      download_path: "/云下载/media/xx" # 离线下载文件的存放目录
+      target_path: "/media/xx/日韩" # 下载完成后移动文件的目标目录
+      min_transfer_size: 200 # 覆盖默认的最小传输大小（MB），小于等于0表示使用默认值
+      type: xx-BBAN
+    - name: "xx-FC2"
+      download_path: "/云下载/media/xx" # 离线下载文件的存放目录
+      target_path: "/media/xx/日韩" # 下载完成后移动文件的目标目录
+      min_transfer_size: 200 # 覆盖默认的最小传输大小（MB），小于等于0表示使用默认值
+      type: xx-FC2
+    - name: "xx-IDEA POCKET"
+      download_path: "/云下载/media/xx" # 离线下载文件的存放目录
+      target_path: "/media/xx/日韩" # 下载完成后移动文件的目标目录
+      min_transfer_size: 200 # 覆盖默认的最小传输大小（MB），小于等于0表示使用默认值
+      type: xx-IDEA POCKET
+    - name: "xx-JUQ"
+      download_path: "/云下载/media/xx" # 离线下载文件的存放目录
+      target_path: "/media/xx/日韩" # 下载完成后移动文件的目标目录
+      min_transfer_size: 200 # 覆盖默认的最小传输大小（MB），小于等于0表示使用默认值
+      type: xx-JUQ
+    - name: "xx-MOODYZ"
+      download_path: "/云下载/media/xx" # 离线下载文件的存放目录
+      target_path: "/media/xx/日韩" # 下载完成后移动文件的目标目录
+      min_transfer_size: 200 # 覆盖默认的最小传输大小（MB），小于等于0表示使用默认值
+      type: xx-MOODYZ
+    - name: "xx-S1 NO.1"
+      download_path: "/云下载/media/xx" # 离线下载文件的存放目录
+      target_path: "/media/xx/日韩" # 下载完成后移动文件的目标目录
+      min_transfer_size: 200 # 覆盖默认的最小传输大小（MB），小于等于0表示使用默认值
+      type: xx-S1 NO.1
+    - name: "xx-SOD"
+      download_path: "/云下载/media/xx" # 离线下载文件的存放目录
+      target_path: "/media/xx/日韩" # 下载完成后移动文件的目标目录
+      min_transfer_size: 200 # 覆盖默认的最小传输大小（MB），小于等于0表示使用默认值
+      type: xx-SOD
   # xx库配置，xx表示成人片库，我们需要对其进行特殊处理（重命名等操作）
   xx:
     # 1.需要移除视频文件名中的哪些关键词，因为有的名称内包含了一些网址或者一些无意义的关键词，我们需要将这些关键词从视频文件名中移除
-    remove_keywords: ["hhd800.com@", "_X1080X", "[98t.tv]", "_60FPS", "-4k"]
+    remove_keywords:
+      [
+        "hhd800.com@",
+        "_X1080X",
+        "[98t.tv]",
+        "_60FPS",
+        "-4k",
+        "4k2.me@",
+        "489155.com@",
+      ]
     # 2.将文件名转为全大写
     # 3.整理不规则的视频名称，我们需要的是 `片商-番号-其他`，但是有些视频文件的名称可能是 `片商.番号.其他`，我们需要将这些名称整理为 `片商-番号-其他` 的格式
 
