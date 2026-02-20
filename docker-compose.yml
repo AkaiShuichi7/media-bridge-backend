@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   backend:
     image: akaishuichiw/media-bridge-backend:latest
@@ -9,7 +7,7 @@ services:
       - "8000:8000"
     volumes:
       - ./config.yaml:/app/config.yaml:ro
-      - ./data:/app/data
+      - ./data.db:/app/data.db
       - ./logs:/app/logs
     environment:
       - CONFIG_PATH=/app/config.yaml

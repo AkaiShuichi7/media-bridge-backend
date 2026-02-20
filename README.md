@@ -136,7 +136,7 @@ docker run -d \
 | 目录 | 说明 |
 |------|------|
 | `./config.yaml` | 配置文件（需提前创建并配置 115 cookies） |
-| `./data` | SQLite 数据库存储目录 |
+| `./data.db` | SQLite 数据库文件 |
 | `./logs` | 日志文件目录 |
 
 #### 环境变量
