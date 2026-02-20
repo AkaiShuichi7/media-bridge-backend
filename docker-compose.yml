@@ -13,5 +13,4 @@ services:
       - CONFIG_PATH=/app/config.yaml
 
 networks:
-  default:
-    name: media-bridge-network
+  media-bridge-network:
