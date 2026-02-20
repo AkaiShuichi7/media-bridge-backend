@@ -94,6 +94,63 @@ uvicorn main:app --reload
 
 访问 http://localhost:8000/docs 查看 Swagger UI 文档。
 
+### 5. Docker 部署
+
+#### 方式一：使用 Docker Compose（推荐）
+
+```bash
+# 1. 克隆仓库
+git clone https://github.com/AkaiShuichi7/media-bridge-backend.git
+cd media-bridge-backend
+
+# 2. 创建配置文件
+cp config.example.yaml config.yaml
+# 编辑 config.yaml 填写你的 115 cookies
+
+# 3. 启动容器
+docker-compose up -d
+```
+
+#### 方式二：手动运行容器
+
+```bash
+# 1. 拉取镜像
+docker pull akaishuichiw/media-bridge-backend:latest
+
+# 2. 创建配置目录
+mkdir -p media-bridge && cd media-bridge
+cp /path/to/config.yaml .
+
+# 3. 运行容器
+docker run -d \
+  -p 8000:8000 \
+  -v $(pwd)/config.yaml:/app/config.yaml:ro \
+  -v $(pwd)/data:/app/data \
+  -v $(pwd)/logs:/app/logs \
+  --name media-bridge-backend \
+  akaishuichiw/media-bridge-backend:latest
+```
+
+#### 持久化目录说明
+
+| 目录 | 说明 |
+|------|------|
+| `./config.yaml` | 配置文件（需提前创建并配置 115 cookies） |
+| `./data` | SQLite 数据库存储目录 |
+| `./logs` | 日志文件目录 |
+
+#### 环境变量
+
+| 变量名 | 说明 | 默认值 |
+|--------|------|--------|
+| `CONFIG_PATH` | 配置文件路径 | `/app/config.yaml` |
+| `P115_COOKIES` | 115 Cookies（可覆盖配置文件） | - |
+
+#### 访问服务
+
+- API 文档：http://localhost:8000/docs
+- 健康检查：http://localhost:8000/health
+
 ---
 
 ## 📚 API 文档
@@ -177,7 +234,9 @@ interface ApiResponse<T> {
 - **方法**: `POST`
 - **路径**: `/api/tasks`
 - **说明**: 向 115 网盘添加磁力链接下载任务。
+
 - **请求参数 (Body)**:
+
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
 | `magnet` | string | 是 | 磁力链接 |
@@ -245,7 +304,9 @@ interface ApiResponse<T> {
 - **方法**: `GET`
 - **路径**: `/api/tasks/{task_id}`
 - **说明**: 根据 ID 查询任务的具体状态和路径。
+
 - **路径参数**:
+
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
 | `task_id` | string | 是 | 任务唯一标识 |
@@ -289,7 +350,9 @@ interface ApiResponse<T> {
 - **方法**: `GET`
 - **路径**: `/api/organize/records`
 - **说明**: 分页查询已完成的文件整理历史。
+
 - **查询参数**:
+
 | 参数名 | 类型 | 默认值 | 说明 |
 |--------|------|--------|------|
 | `page` | int | 1 | 页码，不小于 1 |
@@ -355,7 +418,9 @@ interface ApiResponse<T> {
 - **方法**: `PUT`
 - **路径**: `/api/config`
 - **说明**: 部分更新系统参数，仅传需要修改的字段即可。
+
 - **请求参数 (Body)**:
+
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
 | `p115` | object | 否 | 115 相关配置 |
